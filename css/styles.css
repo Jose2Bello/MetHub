@@ -1,18 +1,19 @@
 
+/* 1. VARIABLES GLOBALES (Paleta de Identidad Museográfica) */
 :root {
-    --bg-primary: #fcfbfa;      
-    --bg-surface: #ffffff;     
-    --color-text: #1a1a1a;     
-    --color-muted: #666666;      
+    --bg-primary: #fcfbfa;   
+    --bg-surface: #ffffff;       
+    --color-text: #1a1a1a;       
+    --color-muted: #666666;     
     --color-accent: #8e2424;     
-    --color-border: #e5e0da;     
+    --color-border: #e5e0da;    
     --font-serif: 'Georgia', 'Times New Roman', serif;
     --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --max-width: 1200px;
     --transition: all 0.3s ease;
 }
 
-/* Reset de Estilos Básicos */
+/* 2. RESET GENERAL Y CONFIGURACIÓN BASE */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -25,26 +26,25 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     min-height: 100vh;
-    display: block; /* Mantenemos flujo lineal simple para WeasyPrint/SPA */
+    display: flex;
+    flex-direction: column; /* Permite empujar el footer hacia abajo si hay poco contenido */
 }
 
-/* Contenedor Principal de la SPA */
+/* Contenedor Único de la SPA */
 #app {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 40px 20px;
-    min-height: calc(100vh - 160px); /* Ajuste dinámico aproximado */
+    flex: 1; /* Absorbe el espacio restante manteniendo el footer al fondo */
+    width: 100%;
 }
 
-/* ==========================================================================
-   ESTRUCTURAS DE LAS VISTAS (LAYOUTS)
-   ========================================================================== */
-
-/* Títulos con Serifas para emular un entorno de arte */
+/* 3. TIPOGRAFÍA COHERENTE */
 h1, h2, h3 {
     font-family: var(--font-serif);
     color: var(--color-text);
     margin-bottom: 20px;
+    font-weight: normal;
 }
 
 h1 {
@@ -53,75 +53,173 @@ h1 {
     padding-bottom: 10px;
 }
 
-/* Sistema de Galería / Rejilla Adaptable para Tarjetas de Obras (Home/Explore) */
-.gallery-grid {
-    display: table;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 20px;
+h2 {
+    font-size: 1.6rem;
     margin-top: 20px;
 }
 
-/* Tarjetas de Obra Base */
-.artwork-card {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 15px;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.artwork-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-    border-color: var(--color-accent);
-}
-
-/* Layout de Dos Columnas para Detalle y Comparador (Pantallas Grandes) */
-.split-layout {
-    width: 100%;
-    margin-top: 30px;
-}
-
-.column-left, .column-right {
-    vertical-align: top;
-    padding: 15px;
-}
-
-/* Componentes Globales Persistentes (Estructura de Bloque) */
-header, footer {
+/* 4. COMPONENTES GLOBALES (NavBar & Footer) */
+header, .main-navbar {
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--color-border);
     padding: 20px;
     text-align: center;
 }
 
-footer {
+footer, .main-footer {
+    background-color: var(--bg-surface);
     border-top: 1px solid var(--color-border);
-    border-bottom: none;
+    padding: 20px;
+    text-align: center;
     color: var(--color-muted);
     font-size: 0.9rem;
-    margin-top: 40px;
+    margin-top: auto; /* Se ancla al fondo del body */
 }
 
-/* Enlaces y Botones */
-a, button {
+/* 5. SECCIÓN DE ESTADÍSTICAS (Home / Explore) */
+.stats-section {
+    margin-bottom: 30px;
+}
+
+.stats-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Soporte responsivo automático */
+}
+
+.stats-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 15px 25px;
+    min-width: 200px;
+    flex: 1;
+}
+
+.stats-card strong {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    display: block;
+}
+
+/* 6. GALERÍA Y REJILLAS DE TARJETAS (Grid Adaptable) */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Tarjetas de Obra Unificadas (Corrección de duplicados) */
+.artwork-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(142, 36, 36, 0.08);
+    border-color: var(--color-accent);
+}
+
+/* Elementos internos de las tarjetas */
+.artwork-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 4px;
+    background-color: #eae6e1;
+    margin-bottom: 12px;
+}
+
+.artwork-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.artwork-card p {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+/* 7. ESTRUCTURAS COMPLEJAS (Detalle y Comparador de 2 Columnas) */
+.split-layout {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.column-left, .column-right {
+    flex: 1;
+    min-width: 0; /* Evita desbordamientos de cajas flexibles */
+    background-color: var(--bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 25px;
+}
+
+/* Responsividad para pantallas medianas o móviles */
+@media (max-width: 768px) {
+    .split-layout {
+        flex-direction: column;
+    }
+}
+
+/* 8. BOTONES, ENLACES Y ACCIONES */
+a {
     color: var(--color-accent);
     text-decoration: none;
-    cursor: pointer;
+    transition: var(--transition);
 }
 
-button {
+a:hover {
+    text-decoration: underline;
+}
+
+button, .btn {
     background-color: var(--color-accent);
     color: #ffffff;
     border: none;
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 4px;
+    font-family: var(--font-sans);
+    cursor: pointer;
     transition: var(--transition);
 }
 
-button:hover {
+button:hover, .btn:hover {
     background-color: #6b1b1b;
+}
+
+/* 9. ESTADOS GLOBALES DE LA INTERFAZ */
+.loading-state {
+    font-style: italic;
+    color: var(--color-accent);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.error-state {
+    padding: 25px;
+    border: 1px dashed var(--color-accent);
+    border-radius: 6px;
+    background-color: #fff5f5;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.error-state p {
+    color: var(--color-accent);
+    margin-bottom: 15px;
+    font-weight: bold;
 }
