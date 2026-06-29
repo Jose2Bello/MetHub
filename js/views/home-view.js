@@ -20,7 +20,7 @@ function renderHomeView() {
 
     const exploreBtn = document.createElement('button');
     exploreBtn.className = 'btn';
-    exploreBtn.textContent = 'Ir al Buscador Avanzado 🔍';
+    exploreBtn.textContent = 'Ir al Buscador Avanzado 🔎';
     exploreBtn.style.marginBottom = '30px';
     
     // Al hacer click, cambiamos el hash global. El router lo detectará solo.

@@ -1,4 +1,7 @@
-
+/**
+ * MetHub — Controlador de Vista: Exploración Avanzada (#explore)
+ * Versión Final: Implementación Completa con Indicadores Estadísticos en Vivo (RF-05)
+ */
 
 function renderExploreView() {
     const container = document.createElement('div');
@@ -7,7 +10,7 @@ function renderExploreView() {
     // VARIABLES DE ESTADO INTERNO DE LA VISTA
     let currentSearchIds = [];
     let currentPage = 1;
-    const itemsPerPage = 12; // Requerimiento 4.2.3: Paginación a 12 por página
+    const itemsPerPage = 12; // Requerimiento 4.2.3
     let debounceTimer = null;
 
     // 1. TÍTULO DE LA VISTA
@@ -71,7 +74,7 @@ function renderExploreView() {
     imagesLabel.style.gap = '5px';
     const imagesCheck = document.createElement('input');
     imagesCheck.type = 'checkbox';
-    imagesCheck.checked = true; // Por defecto activado para mejor UX
+    imagesCheck.checked = true;
     imagesLabel.appendChild(imagesCheck);
     imagesLabel.appendChild(document.createTextNode('Solo con Imagen Disponible'));
     filtersContainer.appendChild(imagesLabel);
@@ -80,7 +83,7 @@ function renderExploreView() {
     container.appendChild(searchForm);
 
     // ==========================================================================
-    // 3. SECCIÓN DE ESTADÍSTICAS EN VIVO (Métricas dinámicas)
+    // 3. SECCIÓN DE ESTADÍSTICAS EN VIVO (Contenedor de Métricas Agregadas RF-05)
     // ==========================================================================
     const liveStatsContainer = document.createElement('div');
     liveStatsContainer.className = 'stats-section';
@@ -93,7 +96,6 @@ function renderExploreView() {
     resultsContainer.className = 'gallery-grid';
     container.appendChild(resultsContainer);
 
-    // Mensaje de estado por defecto
     const statusMessage = document.createElement('p');
     statusMessage.textContent = 'Escribe un término arriba para comenzar a explorar la colección.';
     statusMessage.style.color = 'var(--color-muted)';
@@ -130,15 +132,98 @@ function renderExploreView() {
     container.appendChild(paginationContainer);
 
     // ==========================================================================
-    // 6. CONTROLADOR CENTRAL DE LOGICA ASÍNCRONA
+    // 6. ANALIZADOR DE MÉTRICAS EN TIEMPO REAL (LÓGICA RF-05)
     // ==========================================================================
-    
+    function calculateLivePageStats(artworks) {
+        liveStatsContainer.innerHTML = ''; // Limpiar estadísticas previas
+
+        if (!artworks || artworks.length === 0) return;
+
+        const deptCounts = {};
+        const centuryCounts = {};
+
+        artworks.forEach(art => {
+            // A. Procesar Frecuencia de Departamentos
+            const dept = art.department || 'Desconocido';
+            deptCounts[dept] = (deptCounts[dept] || 0) + 1;
+
+            // B. Extracción e Identificación de Siglos (Regex e Inferencia básica)
+            let century = 'Indeterminado';
+            const dateStr = (art.objectDate || '').toLowerCase();
+            const periodStr = (art.period || '').toLowerCase();
+
+            // Evaluar si la API ya define explícitamente el siglo en texto
+            const centuryMatch = dateStr.match(/(\d+)(st|nd|rd|th)\s+century/);
+            if (centuryMatch) {
+                century = `Siglo ${centuryMatch[1]}`;
+            } else {
+                // Intentar extraer números que parezcan años de 3 o 4 dígitos
+                const yearMatches = dateStr.match(/\b(\d{3,4})\b/g);
+                if (yearMatches && yearMatches.length > 0) {
+                    const year = parseInt(yearMatches[0], 10);
+                    if (!isNaN(year) && year > 0) {
+                        const calculatedCentury = Math.ceil(year / 100);
+                        century = `Siglo ${calculatedCentury}`;
+                    }
+                } else if (periodStr && periodStr !== '—') {
+                    century = art.period; // Caída controlada al Periodo histórico si no hay año numérico
+                }
+            }
+            centuryCounts[century] = (centuryCounts[century] || 0) + 1;
+        });
+
+        // Encontrar la Moda (El valor más repetido) para Departamentos
+        let dominantDept = 'Desconocido';
+        let maxDeptCount = 0;
+        Object.entries(deptCounts).forEach(([dept, count]) => {
+            if (count > maxDeptCount) {
+                maxDeptCount = count;
+                dominantDept = dept;
+            }
+        });
+
+        // Encontrar la Moda para el Siglo / Época
+        let dominantCentury = 'Indeterminado';
+        let maxCenturyCount = 0;
+        Object.entries(centuryCounts).forEach(([cen, count]) => {
+            if (count > maxCenturyCount) {
+                maxCenturyCount = count;
+                dominantCentury = cen;
+            }
+        });
+
+        // --- Renderizar los Bloques Visuales de las Métricas Agregadas ---
+        const statsTitle = document.createElement('h3');
+        statsTitle.textContent = 'Métricas de la Página Actual';
+        statsTitle.style.fontSize = '1.1rem';
+        statsTitle.style.marginBottom = '15px';
+        liveStatsContainer.appendChild(statsTitle);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'stats-container';
+
+        const deptCard = document.createElement('div');
+        deptCard.className = 'stats-card';
+        deptCard.innerHTML = `<span>Departamento Común</span><strong>${dominantDept}</strong><small style="color: var(--color-muted)">Aparece ${maxDeptCount} vez/veces en esta página</small>`;
+
+        const centuryCard = document.createElement('div');
+        centuryCard.className = 'stats-card';
+        centuryCard.innerHTML = `<span>Época/Siglo Dominante</span><strong>${dominantCentury}</strong><small style="color: var(--color-muted)">Representa a ${maxCenturyCount} obra(s) listada(s)</small>`;
+
+        wrapper.appendChild(deptCard);
+        wrapper.appendChild(centuryCard);
+        liveStatsContainer.appendChild(wrapper);
+    }
+
+    // ==========================================================================
+    // 7. CONTROLADOR CENTRAL DE LOGICA ASÍNCRONA
+    // ==========================================================================
     function executeSearch() {
         const query = searchInput.value.trim();
         
-        // Si no hay texto, reiniciamos el contenedor al estado inicial
         if (query.length < 2) {
             resultsContainer.innerHTML = '';
+            liveStatsContainer.innerHTML = '';
             statusMessage.textContent = 'Escribe un término arriba para comenzar a explorar la colección.';
             resultsContainer.appendChild(statusMessage);
             currentSearchIds = [];
@@ -146,18 +231,16 @@ function renderExploreView() {
             return;
         }
 
-        // 1. Mostrar estado de carga en la rejilla
         resultsContainer.innerHTML = '';
+        liveStatsContainer.innerHTML = '';
         statusMessage.textContent = 'Buscando en los servidores del Met...';
         resultsContainer.appendChild(statusMessage);
 
-        // 2. Construir parámetros opcionales de filtrado
         let extraParams = '';
         if (deptSelect.value) extraParams += `&departmentId=${deptSelect.value}`;
         if (highlightCheck.checked) extraParams += `&isHighlight=true`;
         if (imagesCheck.checked) extraParams += `&hasImages=true`;
 
-        // 3. Consultar los IDs que cumplen con los criterios
         MetAPI.searchObjects(query, extraParams)
             .then(data => {
                 resultsContainer.innerHTML = '';
@@ -170,7 +253,6 @@ function renderExploreView() {
                     return;
                 }
 
-                // Guardamos el pool total de IDs devueltos y reiniciamos a página 1
                 currentSearchIds = data.objectIDs;
                 currentPage = 1;
                 renderCurrentPageResults();
@@ -183,16 +265,13 @@ function renderExploreView() {
             });
     }
 
-    // Mapea los IDs de la página actual, los resuelve en paralelo y los dibuja
     async function renderCurrentPageResults() {
         resultsContainer.innerHTML = '';
         
-        // Calcular índices de segmentación para la página actual
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const pageIds = currentSearchIds.slice(startIndex, endIndex);
 
-        // Mostrar un pequeño spinner o mensaje de carga local
         const innerLoading = document.createElement('p');
         innerLoading.className = 'loading-state';
         innerLoading.textContent = `Cargando obras de la página ${currentPage}...`;
@@ -200,7 +279,7 @@ function renderExploreView() {
 
         updatePaginationUI();
 
-        // Resolución Concurrente Obligatoria (RNF-04 / Promise.allSettled)
+        // Resolución Concurrente Obligatoria (RNF-04)
         const artworks = await MetAPI.resolveObjectIDs(pageIds);
         innerLoading.remove();
 
@@ -210,7 +289,10 @@ function renderExploreView() {
             return;
         }
 
-        // Renderizar cada obra que resolvió correctamente (RNF-07: Prohibido innerHTML con datos externos)
+        // NUEVO: Invocar el cálculo estadístico dinámico sobre las obras devueltas
+        calculateLivePageStats(artworks);
+
+        // Renderizar las tarjetas resultantes (RNF-07)
         artworks.forEach(artwork => {
             const card = document.createElement('div');
             card.className = 'artwork-card';
@@ -235,7 +317,6 @@ function renderExploreView() {
             card.appendChild(cardArtist);
             card.appendChild(cardMeta);
 
-            // Redirección interactiva al detalle
             card.addEventListener('click', () => {
                 window.location.hash = `#detail/${artwork.objectID}`;
             });
@@ -253,10 +334,8 @@ function renderExploreView() {
     }
 
     // ==========================================================================
-    // 7. LISTENERS CON DEBOUNCE Y MANEJO DE EVENTOS
+    // 8. LISTENERS CON DEBOUNCE Y MANEJO DE EVENTOS
     // ==========================================================================
-    
-    // Escuchar la escritura con un Debounce de 500ms para cuidar la red
     searchInput.addEventListener('input', () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
@@ -264,12 +343,10 @@ function renderExploreView() {
         }, 500);
     });
 
-    // Filtros directos relanzan la búsqueda de inmediato
     deptSelect.addEventListener('change', () => executeSearch());
     highlightCheck.addEventListener('change', () => executeSearch());
     imagesCheck.addEventListener('change', () => executeSearch());
 
-    // Eventos de botones de paginación
     btnPrev.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -285,7 +362,9 @@ function renderExploreView() {
         }
     });
 
- 
+    // ==========================================================================
+    // EXTRAS: CARGA INICIAL DE DEPARTAMENTOS
+    // ==========================================================================
     MetAPI.getDepartments().then(data => {
         if (data && data.departments) {
             data.departments.forEach(dept => {
