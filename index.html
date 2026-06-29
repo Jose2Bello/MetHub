@@ -6,8 +6,18 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-
-    <div id="navbar-container"></div>
+<header class="main-navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px;">
+        <div class="logo" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: bold; color: var(--color-accent); cursor: pointer;" onclick="window.location.hash = '#home'">
+            <img src="assets/20BREUER-superJumbo-v3.jpg" alt="MetHub Logo" style="height: 50px; margin-right: 10px;">
+          <h1>MetHub</h1>
+        </div>
+        <nav style="display: flex; gap: 20px;">
+            <a href="#home" style="font-weight: 500;">Inicio</a>
+            <a href="#explore" style="font-weight: 500;">Explorar Colección</a>
+            <a href="#departments" style="font-weight: 500;">Departamentos</a>
+            <a href="#compare" style="font-weight: 500;">Comparador</a>
+        </nav>
+    </header>
 
    <main id="app"></main>
 

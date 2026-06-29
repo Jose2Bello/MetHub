@@ -5,9 +5,7 @@ function renderHomeView() {
     const container = document.createElement('div');
     container.className = 'view-home';
 
-    // ==========================================================================
-    // 1. SECCIÓN HERO (Requerimiento 4.1.1)
-    // ==========================================================================
+
     const heroSection = document.createElement('section');
     heroSection.className = 'hero-section';
     
@@ -19,6 +17,21 @@ function renderHomeView() {
     heroDescription.textContent = 'Bienvenido a MetHub, una inmersión digital interactiva a través de más de 5,000 años de cultura y creatividad global. Explora de forma dinámica las obras de arte más influyentes albergadas en el Metropolitan Museum of Art de Nueva York.';
     heroDescription.style.marginBottom = '30px';
     heroDescription.style.color = 'var(--color-muted)';
+
+    const exploreBtn = document.createElement('button');
+    exploreBtn.className = 'btn';
+    exploreBtn.textContent = 'Ir al Buscador Avanzado 🔍';
+    exploreBtn.style.marginBottom = '30px';
+    
+    // Al hacer click, cambiamos el hash global. El router lo detectará solo.
+    exploreBtn.addEventListener('click', () => {
+        window.location.hash = '#explore';
+    });
+
+    heroSection.appendChild(mainTitle);
+    heroSection.appendChild(heroDescription);
+    heroSection.appendChild(exploreBtn); 
+    container.appendChild(heroSection);
 
     heroSection.appendChild(mainTitle);
     heroSection.appendChild(heroDescription);
