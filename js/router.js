@@ -35,15 +35,11 @@ function handleRouting() {
             break;
             
         case '#departments':
-            const depTitle = document.createElement('h1');
-            depTitle.textContent = 'Sección de Departamentos';
-            appContainer.appendChild(depTitle);
+            renderDepartmentsView().then(view => appContainer.appendChild(view));
             break;
             
         case '#compare':
-            const compTitle = document.createElement('h1');
-            compTitle.textContent = 'Comparador Interactivo';
-            appContainer.appendChild(compTitle);
+            renderCompareView().then(view => appContainer.appendChild(view));
             break;
             
         default:
