@@ -7,7 +7,7 @@ async function renderDetailView(id) {
 
     try {
         // 2. Llamada a la API (Asíncrona)
-        const obra = await MetAPI.getObjectById(id);
+        const obra = await MetAPI.getObjectDetails(id);
         
         // 3. Renderizar la estructura completa
         container.innerHTML = `
