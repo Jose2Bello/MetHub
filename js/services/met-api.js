@@ -66,7 +66,7 @@ const MetAPI = {
 
     /**
      * MOTOR DE RESOLUCIÓN CON CONCURRENCIA (OBLIGATORIO RNF-04)
-     * Toma un arreglo de objectIDs, ejecuta peticiones simultáneas en paralelo 
+     * Toma un arreglo de objectIDs, ejecuta peticiones simultáneas en paralelo
      * y extrae únicamente aquellas obras que se cargaron con éxito.
      * @param {Array<number>} ids - Listado de identificadores únicos a resolver.
      * @returns {Promise<Array<any>>} - Arreglo de objetos de obras resueltas y normalizadas.

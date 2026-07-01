@@ -39,7 +39,7 @@ function handleRouting() {
             break;
             
         case '#compare':
-            renderCompareView().then(view => appContainer.appendChild(view));
+            appContainer.appendChild(renderCompareView());
             break;
             
         default:

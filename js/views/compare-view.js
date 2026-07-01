@@ -1,29 +1,52 @@
-// Estado único para la vista
-const compareState = { a: null, b: null };
 
-async function renderCompareView() {
+function renderCompareView() {
     const container = document.createElement('div');
     container.className = 'compare-view';
 
-    container.innerHTML = `
-        <h1>Comparador de Obras</h1>
-        <div class="split-layout">
-            <div class="column-left" id="panel-a">
-                <input type="text" id="id-a" placeholder="ID de Obra A">
-                <button onclick="loadCompare('a')">Cargar A</button>
-            </div>
-            <div class="column-right" id="panel-b">
-                <input type="text" id="id-b" placeholder="ID de Obra B">
-                <button onclick="loadCompare('b')">Cargar B</button>
-            </div>
-        </div>
-        <div id="comparison-result" style="margin-top: 20px;"></div>
-    `;
+    const title = document.createElement('h1');
+    title.textContent = 'Comparador de Obras';
+    container.appendChild(title);
+
+    const splitLayout = document.createElement('div');
+    splitLayout.className = 'split-layout';
+
+    
+    function createPanel(idPrefix) {
+        const panel = document.createElement('div');
+        panel.className = `column-${idPrefix === 'a' ? 'left' : 'right'}`;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `id-${idPrefix}`;
+        input.placeholder = `ID de Obra ${idPrefix.toUpperCase()}`;
+        
+        const btn = document.createElement('button');
+        btn.textContent = `Cargar ${idPrefix.toUpperCase()}`;
+        
+        
+        btn.addEventListener('click', () => loadCompare(idPrefix));
+        
+        panel.appendChild(input);
+        panel.appendChild(btn);
+        return panel;
+    }
+
+    splitLayout.appendChild(createPanel('a'));
+    splitLayout.appendChild(createPanel('b'));
+    container.appendChild(splitLayout);
+
+    const resultDiv = document.createElement('div');
+    resultDiv.id = 'comparison-result';
+    resultDiv.style.marginTop = '20px';
+    container.appendChild(resultDiv);
+
     return container;
 }
 
-// Función única y global de carga
-window.loadCompare = async (slot) => {
+// Variable de estado local para el comparador
+let compareState = { a: null, b: null };
+
+async function loadCompare(slot) {
     const inputId = document.getElementById(`id-${slot}`).value;
     if (!inputId) return;
 
@@ -31,21 +54,32 @@ window.loadCompare = async (slot) => {
         const obra = await MetAPI.getObjectDetails(inputId);
         compareState[slot] = obra;
 
-        // Feedback: Actualiza el panel correspondiente
+  
         const panel = document.getElementById(`panel-${slot}`);
-        // Removemos feedback previo si existe para no acumular párrafos
+        
         panel.querySelectorAll('p').forEach(p => p.remove());
-        panel.insertAdjacentHTML('beforeend', `<p>✅ Cargado: <strong>${obra.title}</strong></p>`);
 
-        // Generar tabla solo si ambos slots tienen datos
+     
+        const p = document.createElement('p');
+        p.textContent = 'Cargado: ';
+        const strong = document.createElement('strong');
+        strong.textContent = obra.title || 'Título desconocido';
+        p.appendChild(strong);
+        panel.appendChild(p);
+
+        // Si ambos slots tienen datos, construimos la tabla
         if (compareState.a && compareState.b) {
-            document.getElementById('comparison-result').innerHTML = buildComparisonTable(compareState.a, compareState.b);
+            const resultContainer = document.getElementById('comparison-result');
+            resultContainer.innerHTML = ''; // Limpiamos el resultado anterior
+            
+            const table = buildComparisonTable(compareState.a, compareState.b);
+            resultContainer.appendChild(table);
         }
     } catch (error) {
         alert("Error al cargar la obra. Verifica el ID.");
         console.error(error);
     }
-};
+}
 
 // Generador de la tabla
 function buildComparisonTable(obraA, obraB) {
