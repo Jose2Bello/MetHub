@@ -15,12 +15,12 @@ async function renderDepartmentsView() {
             card.className = 'artwork-card'; // Reutilizamos el estilo de tarjetas que ya tienes
             card.innerHTML = `<h3>${depto.displayName}</h3>`;
 
-            // 3. Lógica de navegación filtrada (lo que ya tenías)
-            card.addEventListener('click', () => {
-                window.location.hash = `#explore?departmentId=${depto.departmentId}`;
-            });
-
-            grid.appendChild(card);
+          
+                card.addEventListener('click', () => {
+            // Al hacer clic, cambiamos el hash a nuestra nueva ruta con el ID correspondiente
+            window.location.hash = `#department-gallery/${depto.departmentId}`;
+        });
+          grid.appendChild(card);
         });
 
     } catch (error) {

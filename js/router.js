@@ -1,51 +1,62 @@
 function handleRouting() {
     const hash = window.location.hash || '#home';
     const appContainer = document.getElementById('app');
-    
     if (!appContainer) return;
+    appContainer.textContent = '';
     
     // Al cambiar de vista, limpiamos por completo el contenedor principal
     appContainer.textContent = ''; 
 
-    // 1. Manejo de Rutas Dinámicas
-    if (hash.startsWith('#detail/')) {
-        const id = hash.split('/')[1];
+    // --- LÓGICA DE SEPARACIÓN (Ruta Base vs Parámetros) ---
+    
+    const [path, queryParams] = hash.split('?');
+    const params = new URLSearchParams(queryParams);
+    // -----------------------------------------------------
+
+    // 1. Manejo de Rutas Dinámicas (Detalle y Artista)
+    if (path.startsWith('#detail/')) {
+        const id = path.split('/')[1];
         if (id) {
             appContainer.appendChild(renderDetailView(id));
             return;
         }
     }
+
+    if (hash.startsWith('#department-gallery/')) {
+        const deptId = hash.split('/')[1];
+        if (deptId) {
+        // Renderiza la nueva vista pasándole el ID del departamento
+        appContainer.appendChild(renderDepartmentGalleryView(deptId));
+        return;
+    }
+}
     
-    if (hash.startsWith('#artist/')) {
-        const name = decodeURIComponent(hash.split('/')[1]);
+    if (path.startsWith('#artist/')) {
+        const name = decodeURIComponent(path.split('/')[1]);
         const title = document.createElement('h1');
         title.textContent = `Obras del artista: ${name}`;
         appContainer.appendChild(title);
         return;
     }
 
-    // 2. Manejo de Rutas Estáticas
-    switch (hash) {
+   
+   switch (path) {
         case '#home':
             appContainer.appendChild(renderHomeView());
             break;
-            
-        case '#explore':
-            appContainer.appendChild(renderExploreView());
+       case '#explore':
+            const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+            const deptId = urlParams.get('departmentId'); // Extraemos el ID
+            appContainer.appendChild(renderExploreView(deptId)); 
             break;
-            
         case '#departments':
             renderDepartmentsView().then(view => appContainer.appendChild(view));
             break;
-            
         case '#compare':
             appContainer.appendChild(renderCompareView());
             break;
-            
         default:
-            const errorTitle = document.createElement('h1');
-            errorTitle.textContent = '404 - Vista no encontrada';
-            appContainer.appendChild(errorTitle);
+            appContainer.innerHTML = '<h1>404 - Página no encontrada</h1>';
             break;
     }
 }

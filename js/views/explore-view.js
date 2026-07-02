@@ -3,7 +3,7 @@
  * Versión Final: Implementación Completa con Indicadores Estadísticos en Vivo (RF-05)
  */
 
-function renderExploreView() {
+function renderExploreView(initialDeptId = null) {
     const container = document.createElement('div');
     container.className = 'view-explore';
 
@@ -376,5 +376,21 @@ function renderExploreView() {
         }
     }).catch(err => console.error(err));
 
+    // ==========================================================================
+    // CARGA INICIAL SI SE PROPORCIONA UN DEPARTMENT ID EN LA URL
+    // ==========================================================================
+    if (initialDeptId) {
+        MetAPI.getDepartments().then(data => {
+            if (data && data.departments) {
+                // Poblamos el select (asegúrate de tener una función que llene el select)
+                populateDepartmentSelect(data.departments);
+                
+                // Seteamos el valor y buscamos
+                deptSelect.value = initialDeptId;
+                executeSearch();
+            }
+        }).catch(err => console.error("Error al cargar departamentos:", err));
+    }
+    
     return container;
 }
