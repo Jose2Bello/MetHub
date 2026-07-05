@@ -99,6 +99,42 @@ async function loadArtworkDetails(id, loadingElement, layoutElement) {
         layoutElement.appendChild(leftColumn);
         layoutElement.appendChild(rightColumn);
 
+        const compareBtn = document.createElement('button');
+        compareBtn.className = 'btn-compare-action';
+        compareBtn.textContent = '📊 Comparar esta obra';
+        compareBtn.style.marginTop = '20px';
+        compareBtn.style.width = '100%';
+        
+   compareBtn.addEventListener('click', () => {
+    const obraParaComparar = {
+        id: obra.objectID,
+        title: obra.title || 'Sin título',
+        artist: obra.artistDisplayName || 'Artista desconocido',
+        image: obra.primaryImageSmall || obra.primaryImage || 'assets/no-image.png',
+        date: obra.objectDate || 'Desconocida',
+        medium: obra.medium || 'No especificado'
+    };
+    
+    const obra1Guardada = localStorage.getItem('obra_seleccionada_1');
+    
+    if (!obra1Guardada) {
+        localStorage.setItem('obra_seleccionada_1', JSON.stringify(obraParaComparar));
+    } else {
+      
+        const obra1 = JSON.parse(obra1Guardada);
+        if (obra1.id === obraParaComparar.id) {
+            alert('¡Ya seleccionaste esta obra como la Obra Base! Elige una diferente para comparar.');
+            return;
+        }
+        
+      
+        localStorage.setItem('obra_seleccionada_2', JSON.stringify(obraParaComparar));
+    }
+  
+    window.location.hash = '#compare';
+});
+        rightColumn.appendChild(compareBtn);
+
     } catch (error) {
         console.error("Error al cargar el detalle de la obra:", error);
         loadingElement.textContent = 'No se pudieron cargar los detalles de esta obra de arte.';

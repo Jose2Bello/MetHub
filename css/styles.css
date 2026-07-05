@@ -352,3 +352,19 @@ button:hover, .btn:hover {
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 6px;
 }
+
+.btn-compare-action {
+    background-color: #2a52be; /* Azul elegante de contraste */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-compare-action:hover {
+    background-color: #1e3d96;
+}
