@@ -50,7 +50,8 @@ function handleRouting() {
             appContainer.appendChild(renderExploreView(deptId)); 
             break;
         case '#departments':
-            renderDepartmentsView().then(view => appContainer.appendChild(view));
+            appContainer.textContent = ''; 
+            appContainer.appendChild(renderDepartmentsView()); 
             break;
         case '#compare':
             appContainer.appendChild(renderCompareView());

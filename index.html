@@ -9,12 +9,15 @@
     
     <header class="main-navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px;">
         
+      
         <div class="logo" style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="window.location.hash = '#home'">
             <img src="assets/20BREUER-superJumbo-v3.jpg" alt="MetHub Logo" style="height: 40px; width: auto; object-fit: cover; border-radius: 4px;">
-            <h1 style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: bold; color: var(--color-accent); margin-bottom: 0; border-bottom: none; padding-bottom: 0;">MetHub</h1>
+            <h1 style="font-family: 'BlackChancery', var(--font-serif); font-size: 1.6rem; font-weight: normal; color: var(--color-accent); margin-bottom: 0; border-bottom: none; padding-bottom: 0;">MetHub</h1>
         </div>
         
-        <nav style="display: flex; gap: 20px;">
+     
+        <nav style="display: flex; align-items: center; gap: 20px;">
+            <button id="theme-toggle" class="btn-theme-toggle" aria-label="Cambiar tema" style="margin-right: 5px;">🌙</button>
             <a href="#home" style="font-weight: 500;">Inicio</a>
             <a href="#explore" style="font-weight: 500;">Explorar Colección</a>
             <a href="#departments" style="font-weight: 500;">Departamentos</a>
