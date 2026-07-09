@@ -35,5 +35,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 themeToggleBtn.textContent = '☀️';
             }
         });
-    }
+        
+    } 
 });
+
+window.createArtImage = function(src, alt) {
+    const img = document.createElement('img');
+    
+    if (src) {
+        img.src = src;
+    } else {
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text x="50%" y="50%" font-family="sans-serif" font-size="10" fill="%23555" text-anchor="middle" dy=".3em">Sin imagen</text></svg>';
+        img.style.backgroundColor = '#1a1a1a'; 
+    }
+
+    img.onerror = function() {
+        this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text x="50%" y="50%" font-family="sans-serif" font-size="10" fill="%23555" text-anchor="middle" dy=".3em">Sin imagen</text></svg>';
+        this.style.backgroundColor = '#1a1a1a';
+    };
+    
+    return img;
+};
