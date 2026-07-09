@@ -43,9 +43,7 @@ function renderDepartmentsView() {
             imgContainer.className = 'dept-card-image';
             
             // Imagen temporal de carga limpia
-            const img = document.createElement('img');
-            img.src = 'https://via.placeholder.com/400x250/eeeeee/999999?text=Cargando+Portada...';
-            img.alt = depto.displayName;
+            const img = window.createArtImage(null, depto.displayName);
             imgContainer.appendChild(img);
 
             const infoContainer = document.createElement('div');
