@@ -60,9 +60,7 @@ function renderCompareView() {
 
             const imgBox = document.createElement('div');
             imgBox.style.cssText = 'height: 200px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden;';
-            const img = document.createElement('img');
-            img.src = obraActual.image;
-            img.style.cssText = 'max-height: 100%; max-width: 100%; object-fit: contain;';
+            const img = window.createArtImage(obraActual.image, obraActual.title);
             imgBox.appendChild(img);
             col.appendChild(imgBox);
 
