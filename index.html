@@ -9,13 +9,11 @@
     
     <header class="main-navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 40px;">
         
-      
         <div class="logo" style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="window.location.hash = '#home'">
             <img src="assets/20BREUER-superJumbo-v3.jpg" alt="MetHub Logo" style="height: 40px; width: auto; object-fit: cover; border-radius: 4px;">
             <h1 style="font-family: 'BlackChancery', var(--font-serif); font-size: 1.6rem; font-weight: normal; color: var(--color-accent); margin-bottom: 0; border-bottom: none; padding-bottom: 0;">MetHub</h1>
         </div>
         
-     
         <nav style="display: flex; align-items: center; gap: 20px;">
             <button id="theme-toggle" class="btn-theme-toggle" aria-label="Cambiar tema" style="margin-right: 5px;">🌙</button>
             <a href="#home" style="font-weight: 500;">Inicio</a>
@@ -26,7 +24,18 @@
     </header>
 
     <main id="app"></main>
+
+    <footer class="main-footer" style="margin-top: 50px; padding: 20px 40px; border-top: 1px solid var(--color-borde); background-color: var(--bg-tarjetas); color: var(--texto-secundario); font-size: 0.85rem; text-align: center;">
+        <p style="margin-bottom: 8px; font-weight: 500;">
+            &copy; 2026 <strong>MetHub</strong> — Proyecto Académico de Computación. Desarrollado por José Bello y Santiago Salas.
+        </p>
+        <p style="line-height: 1.5; max-width: 800px; margin: 0 auto; font-style: italic;">
+            <strong>Aviso Legal (Open Access Disclaimer):</strong> Los datos y metadatos utilizados en esta aplicación provienen de la API oficial del Metropolitan Museum of Art (The Met) y son de acceso abierto y dominio público. Las imágenes de las obras se presentan estrictamente con fines educativos y de investigación no comerciales. Algunas piezas pueden tener restricciones de derechos de autor para explotación comercial.
+        </p>
+    </footer>
+
     <script src="js/views/home-view.js"></script>
+    <script src="js/views/artist-view.js"></script>
     <script src="js/views/compare-view.js"></script>
     <script src="js/services/met-api.js"></script>
     <script src="js/views/department-gallery-view.js"></script>

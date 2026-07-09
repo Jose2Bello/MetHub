@@ -401,8 +401,36 @@ button:hover, .btn:hover {
     transition: background 0.2s;
 }
 
+
+.compare-view-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
 .btn-compare-action:hover {
     background-color: #1e3d96;
+}
+
+
+tr.diferente {
+    background-color: rgba(255, 165, 0, 0.08);
+    border-left: 4px solid orange;           
+}
+
+
+input:disabled, button:disabled {
+    background-color: #f0f0f0 !important;
+    color: #999999 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
 }
 
 .departments-grid {

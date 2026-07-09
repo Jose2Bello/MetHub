@@ -2,18 +2,19 @@ function handleRouting() {
     const hash = window.location.hash || '#home';
     const appContainer = document.getElementById('app');
     if (!appContainer) return;
-    appContainer.textContent = '';
     
-    // Al cambiar de vista, limpiamos por completo el contenedor principal
+    // Al cambiar de vista, limpiamos por completo el contenedor principal una sola vez
     appContainer.textContent = ''; 
 
     // --- LÓGICA DE SEPARACIÓN (Ruta Base vs Parámetros) ---
-    
+   
     const [path, queryParams] = hash.split('?');
     const params = new URLSearchParams(queryParams);
     // -----------------------------------------------------
 
-    // 1. Manejo de Rutas Dinámicas (Detalle y Artista)
+    // 1. Manejo de Rutas Dinámicas (Detalle, Galería de Departamento y Artista)
+    
+    // Ruta: #detail/ID
     if (path.startsWith('#detail/')) {
         const id = path.split('/')[1];
         if (id) {
@@ -22,42 +23,53 @@ function handleRouting() {
         }
     }
 
-    if (hash.startsWith('#department-gallery/')) {
-        const deptId = hash.split('/')[1];
+    // Ruta: #department-gallery/ID
+    if (path.startsWith('#department-gallery/')) {
+        const deptId = path.split('/')[1];
         if (deptId) {
-        // Renderiza la nueva vista pasándole el ID del departamento
-        appContainer.appendChild(renderDepartmentGalleryView(deptId));
-        return;
+            appContainer.appendChild(renderDepartmentGalleryView(deptId));
+            return;
+        }
     }
-}
     
+    // Ruta: #artist/NombreArtista
     if (path.startsWith('#artist/')) {
-        const name = decodeURIComponent(path.split('/')[1]);
-        const title = document.createElement('h1');
-        title.textContent = `Obras del artista: ${name}`;
-        appContainer.appendChild(title);
-        return;
+        const artistName = path.split('/')[1]; 
+        if (artistName) {
+            appContainer.appendChild(renderArtistView(artistName));
+            return;
+        }
     }
 
-   
-   switch (path) {
+    // 2. Manejo de Rutas Estáticas
+    switch (path) {
         case '#home':
             appContainer.appendChild(renderHomeView());
             break;
-       case '#explore':
-            const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
-            const deptId = urlParams.get('departmentId'); // Extraemos el ID
-            appContainer.appendChild(renderExploreView(deptId)); 
+
+        case '#explore':
+            // Usamos directamente los parámetros ya extraídos arriba de forma limpia
+            const deptIdExplore = params.get('departmentId'); 
+            appContainer.appendChild(renderExploreView(deptIdExplore)); 
             break;
+
         case '#departments':
-            appContainer.textContent = ''; 
+            // Inyección limpia y sincrónica (Soluciona el error .then de la consola)
             appContainer.appendChild(renderDepartmentsView()); 
             break;
+
         case '#compare':
+            // Inyección limpia de la vista autónoma del comparador
             appContainer.appendChild(renderCompareView());
             break;
+
         default:
-            appContainer.innerHTML = '<h1>404 - Página no encontrada</h1>';
+            // Mensaje de respaldo semántico controlado en caso de error 404
+            const errorHeading = document.createElement('h1');
+            errorHeading.textContent = '404 - Página no encontrada';
+            errorHeading.style.textAlign = 'center';
+            errorHeading.style.marginTop = '5px';
+            appContainer.appendChild(errorHeading);
             break;
     }
 }
