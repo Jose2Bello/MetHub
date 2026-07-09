@@ -1,0 +1,22 @@
+{
+  "name": "MetHub — Explorador del Met Museum",
+  "short_name": "MetHub",
+  "description": "Explorador de obras de arte del Metropolitan Museum of Art (The Met).",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#800000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

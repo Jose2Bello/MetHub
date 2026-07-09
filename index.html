@@ -2,8 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#800000">
     <title>MetHub — Explorador del Met Museum</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icon192.png">
 </head>
 <body>
     
@@ -44,5 +48,14 @@
     <script src="js/views/detail-view.js"></script>
     <script src="js/router.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker registrado con éxito:', reg.scope))
+                    .catch((err) => console.error('Error al registrar el Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>
