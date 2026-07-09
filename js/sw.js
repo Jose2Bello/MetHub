@@ -1,4 +1,5 @@
 const CACHE_NAME = 'methub-cache-v1';
+
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -8,15 +9,11 @@ const STATIC_ASSETS = [
   './js/views/home-view.js',
   './js/views/artist-view.js',
   './js/views/compare-view.js',
-  './js/services/met-api.js',
   './js/views/department-gallery-view.js',
   './js/views/departments-view.js',
   './js/views/explore-view.js',
   './js/views/detail-view.js',
-  './assets/20BREUER-superJumbo-v3.jpg',
-  './assets/fonts/BLKCHCRY.TTF',
-  './assets/icon192.png',
-  './assets/icon512.png'
+  './assets/20BREUER-superJumbo-v3.jpg'
 ];
 
 // Install Event
